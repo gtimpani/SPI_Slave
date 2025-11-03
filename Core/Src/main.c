@@ -43,6 +43,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 SPI_HandleTypeDef hspi3;
+DMA_HandleTypeDef hdma_spi3_rx;
+DMA_HandleTypeDef hdma_spi3_tx;
 
 UART_HandleTypeDef huart3;
 
@@ -57,6 +59,7 @@ uint8_t spi_rx_buffer[2];
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_SPI3_Init(void);
@@ -99,12 +102,14 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
 
   SPI_Start_Comm();
+  printf("SPI Slave started...\n\r");
 
   /* USER CODE END 2 */
 
@@ -113,6 +118,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+	  printf("%02X%02X %02X%02X\n\r",spi_tx_buffer[0],spi_tx_buffer[1],spi_rx_buffer[0],spi_rx_buffer[1]);
 
     /* USER CODE BEGIN 3 */
   }
@@ -286,6 +292,25 @@ static void MX_USB_OTG_FS_PCD_Init(void)
 }
 
 /**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Stream0_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
+  /* DMA1_Stream5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -358,17 +383,15 @@ PUTCHAR_PROTOTYPE
  */
 void SPI_Start_Comm(void)
 {
-	HAL_SPI_TransmitReceive_IT(&hspi3,spi_tx_buffer,spi_rx_buffer,2);
-	printf("SPI Slave started...\n\r");
+	HAL_SPI_TransmitReceive_DMA(&hspi3,spi_tx_buffer,spi_rx_buffer,2);
 }
 
 HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef hspi)
 {
-	printf("%02X%02X %02X%02X\n\r",spi_tx_buffer[0],spi_tx_buffer[1],spi_rx_buffer[0],spi_rx_buffer[1]);
 	spi_tx_buffer[0] = spi_rx_buffer[0];
 	spi_tx_buffer[1] = spi_rx_buffer[1];
 
-	HAL_SPI_TransmitReceive_IT(&hspi3,spi_tx_buffer,spi_rx_buffer,2);
+	HAL_SPI_TransmitReceive_DMA(&hspi3,spi_tx_buffer,spi_rx_buffer,2);
 }
 
 /* USER CODE END 4 */
