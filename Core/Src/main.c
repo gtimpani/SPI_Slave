@@ -109,7 +109,6 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   SPI_Start_Comm();
-  printf("SPI Slave started...\n\r");
 
   /* USER CODE END 2 */
 
@@ -118,7 +117,6 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  printf("%02X%02X %02X%02X\n\r",spi_tx_buffer[0],spi_tx_buffer[1],spi_rx_buffer[0],spi_rx_buffer[1]);
 
     /* USER CODE BEGIN 3 */
   }
@@ -388,6 +386,7 @@ void SPI_Start_Comm(void)
 
 HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef hspi)
 {
+//	printf("%02X%02X %02X%02X\n\r",spi_tx_buffer[0],spi_tx_buffer[1],spi_rx_buffer[0],spi_rx_buffer[1]);
 	spi_tx_buffer[0] = spi_rx_buffer[0];
 	spi_tx_buffer[1] = spi_rx_buffer[1];
 
