@@ -18,6 +18,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
+#include "spi.h"
+#include "usart.h"
+#include "usb_otg.h"
+#include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -31,6 +36,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define ANALOG_TABLE_SIZE 256
+#define UART3_BUFFER_SIZE 256
 
 /* USER CODE END PD */
 
@@ -42,29 +49,40 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-SPI_HandleTypeDef hspi3;
-DMA_HandleTypeDef hdma_spi3_rx;
-DMA_HandleTypeDef hdma_spi3_tx;
-
-UART_HandleTypeDef huart3;
-
-PCD_HandleTypeDef hpcd_USB_OTG_FS;
-
 /* USER CODE BEGIN PV */
-uint8_t spi_tx_buffer[2]/* = {0xBB, 0xBB}*/;
-uint8_t spi_rx_buffer[2];
+uint8_t spi3_tx_buffer[2];
+uint8_t spi3_rx_buffer[2];
+uint8_t uart3_tx_buffer[UART3_BUFFER_SIZE];
+uint8_t uart3_rx_buffer[UART3_BUFFER_SIZE];
+
+typedef enum
+{
+	OK = 0,
+	ERROR_T
+} RESULTS;
+
+typedef enum
+{
+	LOW = 0,
+	HIGH
+} NWR_STATUS;
+
+NWR_STATUS NWR_N = HIGH;
+NWR_STATUS NWR_R = HIGH;
+
+uint8_t channel_n = 0U;
+uint8_t channel_r = 0U;
+
+/* signal, MUX_n, MUX_n_analogInputChannel, MUX_r, MUX_r_analogInputChannel */
+//uint8_t analogTable[ANALOG_TABLE_SIZE][5] = {};
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
-static void MX_USART3_UART_Init(void);
-static void MX_USB_OTG_FS_PCD_Init(void);
-static void MX_SPI3_Init(void);
 /* USER CODE BEGIN PFP */
-void SPI_Start_Comm(void);
+void SPI3_Start_Comm(void);
+void UART3_Start_Comm(void);
 
 /* USER CODE END PFP */
 
@@ -108,7 +126,8 @@ int main(void)
   MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
 
-  SPI_Start_Comm();
+  SPI3_Start_Comm();
+  UART3_Start_Comm();
 
   /* USER CODE END 2 */
 
@@ -179,190 +198,6 @@ void SystemClock_Config(void)
   }
 }
 
-/**
-  * @brief SPI3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_SPI3_Init(void)
-{
-
-  /* USER CODE BEGIN SPI3_Init 0 */
-
-  /* USER CODE END SPI3_Init 0 */
-
-  /* USER CODE BEGIN SPI3_Init 1 */
-
-  /* USER CODE END SPI3_Init 1 */
-  /* SPI3 parameter configuration*/
-  hspi3.Instance = SPI3;
-  hspi3.Init.Mode = SPI_MODE_SLAVE;
-  hspi3.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi3.Init.DataSize = SPI_DATASIZE_8BIT;
-  hspi3.Init.CLKPolarity = SPI_POLARITY_HIGH;
-  hspi3.Init.CLKPhase = SPI_PHASE_2EDGE;
-  hspi3.Init.NSS = SPI_NSS_HARD_INPUT;
-  hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
-  hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
-  hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-  hspi3.Init.CRCPolynomial = 7;
-  hspi3.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
-  hspi3.Init.NSSPMode = SPI_NSS_PULSE_DISABLE;
-  if (HAL_SPI_Init(&hspi3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN SPI3_Init 2 */
-
-  /* USER CODE END SPI3_Init 2 */
-
-}
-
-/**
-  * @brief USART3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USART3_UART_Init(void)
-{
-
-  /* USER CODE BEGIN USART3_Init 0 */
-
-  /* USER CODE END USART3_Init 0 */
-
-  /* USER CODE BEGIN USART3_Init 1 */
-
-  /* USER CODE END USART3_Init 1 */
-  huart3.Instance = USART3;
-  huart3.Init.BaudRate = 115200;
-  huart3.Init.WordLength = UART_WORDLENGTH_8B;
-  huart3.Init.StopBits = UART_STOPBITS_1;
-  huart3.Init.Parity = UART_PARITY_NONE;
-  huart3.Init.Mode = UART_MODE_TX_RX;
-  huart3.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart3.Init.OverSampling = UART_OVERSAMPLING_16;
-  huart3.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart3.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&huart3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USART3_Init 2 */
-
-  /* USER CODE END USART3_Init 2 */
-
-}
-
-/**
-  * @brief USB_OTG_FS Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_USB_OTG_FS_PCD_Init(void)
-{
-
-  /* USER CODE BEGIN USB_OTG_FS_Init 0 */
-
-  /* USER CODE END USB_OTG_FS_Init 0 */
-
-  /* USER CODE BEGIN USB_OTG_FS_Init 1 */
-
-  /* USER CODE END USB_OTG_FS_Init 1 */
-  hpcd_USB_OTG_FS.Instance = USB_OTG_FS;
-  hpcd_USB_OTG_FS.Init.dev_endpoints = 6;
-  hpcd_USB_OTG_FS.Init.speed = PCD_SPEED_FULL;
-  hpcd_USB_OTG_FS.Init.dma_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
-  hpcd_USB_OTG_FS.Init.Sof_enable = ENABLE;
-  hpcd_USB_OTG_FS.Init.low_power_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.lpm_enable = DISABLE;
-  hpcd_USB_OTG_FS.Init.battery_charging_enable = ENABLE;
-  hpcd_USB_OTG_FS.Init.vbus_sensing_enable = ENABLE;
-  hpcd_USB_OTG_FS.Init.use_dedicated_ep1 = DISABLE;
-  if (HAL_PCD_Init(&hpcd_USB_OTG_FS) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN USB_OTG_FS_Init 2 */
-
-  /* USER CODE END USB_OTG_FS_Init 2 */
-
-}
-
-/**
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void)
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Stream0_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
-  /* DMA1_Stream5_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
-
-}
-
-/**
-  * @brief GPIO Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_GPIO_Init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct = {0};
-/* USER CODE BEGIN MX_GPIO_Init_1 */
-/* USER CODE END MX_GPIO_Init_1 */
-
-  /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOD_CLK_ENABLE();
-  __HAL_RCC_GPIOG_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : USER_Btn_Pin */
-  GPIO_InitStruct.Pin = USER_Btn_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(USER_Btn_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : LD1_Pin LD3_Pin LD2_Pin */
-  GPIO_InitStruct.Pin = LD1_Pin|LD3_Pin|LD2_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : USB_PowerSwitchOn_Pin */
-  GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(USB_PowerSwitchOn_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : USB_OverCurrent_Pin */
-  GPIO_InitStruct.Pin = USB_OverCurrent_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(USB_OverCurrent_GPIO_Port, &GPIO_InitStruct);
-
-/* USER CODE BEGIN MX_GPIO_Init_2 */
-/* USER CODE END MX_GPIO_Init_2 */
-}
-
 /* USER CODE BEGIN 4 */
 
 /**
@@ -379,18 +214,101 @@ PUTCHAR_PROTOTYPE
  * @brief This function starts SPI Communication for Slave device
  * @retval None
  */
-void SPI_Start_Comm(void)
+void SPI3_Start_Comm(void)
 {
-	HAL_SPI_TransmitReceive_DMA(&hspi3,spi_tx_buffer,spi_rx_buffer,2);
+	HAL_SPI_TransmitReceive_DMA(&hspi3,spi3_tx_buffer,spi3_rx_buffer,2);
 }
 
+/**
+ * @brief This function starts SPI Communication for Slave device
+ * @retval None
+ */
+void UART3_Start_Comm(void)
+{
+	HAL_UART_Receive_DMA(&huart3,uart3_rx_buffer,UART3_BUFFER_SIZE);
+}
+
+/**
+  * @brief  Function to handle SPI TxRx
+  * @retval None
+*/
 HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef hspi)
 {
-//	printf("%02X%02X %02X%02X\n\r",spi_tx_buffer[0],spi_tx_buffer[1],spi_rx_buffer[0],spi_rx_buffer[1]);
-	spi_tx_buffer[0] = spi_rx_buffer[0];
-	spi_tx_buffer[1] = spi_rx_buffer[1];
+	spi3_tx_buffer[0] = spi3_rx_buffer[0];
+	spi3_tx_buffer[1] = spi3_rx_buffer[1];
 
-	HAL_SPI_TransmitReceive_DMA(&hspi3,spi_tx_buffer,spi_rx_buffer,2);
+	HAL_SPI_TransmitReceive_DMA(&hspi3,spi3_tx_buffer,spi3_rx_buffer,2);
+}
+
+/**
+  * @brief  Function to handle UART Rx
+  * @retval None
+*/
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  HAL_UART_Receive_DMA(&huart3, uart3_rx_buffer, UART3_BUFFER_SIZE);
+
+  for(int i = 0; i < UART3_BUFFER_SIZE; i++)
+  {
+          printf("HAL_UART_Receive_DMA:: %02X\n",uart3_rx_buffer[i]);
+  }
+}
+
+
+/**
+  * @brief  Function to manage GPIO External Interrupts
+  * @retval None
+ */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+        if(GPIO_Pin == USER_Btn_Pin)
+        {
+                /* write your code here to manage USER_Btn [B1] Interrupt */
+        }
+
+        if( (GPIO_Pin >= MUX_N_ADDR_0_Pin) && (GPIO_Pin <= MUX_N_ADDR_4_Pin) )
+        {
+                channel_n |= (uint8_t)GPIO_Pin;
+        }
+
+        if(GPIO_Pin == MUX_N_NWR_Pin)
+        {
+
+                if(HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_RESET)
+                {
+                        NWR_N = LOW;
+                }
+
+                if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (NWR_N == LOW) )
+                {
+                        NWR_N = HIGH;
+                        spi3_tx_buffer[1] = channel_n;
+                        // spi3_tx_buffer[1] = analog_n_Parameters[channel_n];
+                        channel_n = 0U;
+                }
+        }
+
+        if( (GPIO_Pin >= MUX_R_ADDR_0_Pin) && (GPIO_Pin <= MUX_R_ADDR_4_Pin) )
+        {
+                channel_r |= (uint8_t)GPIO_Pin;
+        }
+
+        if(GPIO_Pin == MUX_R_NWR_Pin)
+        {
+                if(HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_RESET)
+                {
+                        NWR_R = LOW;
+                }
+
+                if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (NWR_R == LOW) )
+                {
+                        NWR_R = HIGH;
+                        spi3_tx_buffer[1] = channel_r;
+                        // spi3_tx_buffer[1] = analog_r_Parameters[channel_r];
+                        channel_r = 0U;
+                }
+
+        }
 }
 
 /* USER CODE END 4 */
