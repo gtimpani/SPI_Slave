@@ -28,6 +28,31 @@ SPI_HandleTypeDef hspi3;
 DMA_HandleTypeDef hdma_spi3_rx;
 DMA_HandleTypeDef hdma_spi3_tx;
 
+/**
+ * @brief Custom SPI Init
+ * @retval None
+ */
+
+void _SPI3_Init(void)
+{
+	SPI3->CR1 = 0U;
+	SPI3->CR1 |= (0U << 9U); // HW NSS
+	SPI3->CR1 |= (0U << 7U); // MSB FIRST
+	SPI3->CR1 |= (1U << 6U); // SPI ENABLE
+	SPI3->CR1 |= (0U << 2U); // SLAVE CONFIGURATION
+	SPI3->CR1 |= (1U << 1U); // CPOL HIGH
+	SPI3->CR1 |= (0U << 0U); // CPHA 2ND EDGE
+
+	SPI3->CR2 = 0U;
+	SPI3->CR2 |= (0U << 12U); // FIFO RX THRESHOLD
+	SPI3->CR2 |= (7U << 8U); // DATA SIZE 8-BIT
+	SPI3->CR2 |= (0U << 7U); // TXE - Tx buffer empty interrupt disabled
+	SPI3->CR2 |= (0U << 6U); // RXNE - Rx buffer not empty interrupt disabled
+	SPI3->CR2 |= (0U << 4U); // Frame format Motorola
+	SPI3->CR2 |= (0U << 1U); // TXDMAEN Disabled
+	SPI3->CR2 |= (0U << 0U); // RXDMAEN Disabled
+}
+
 /* SPI3 init function */
 void MX_SPI3_Init(void)
 {

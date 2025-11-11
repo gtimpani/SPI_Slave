@@ -38,6 +38,7 @@
 /* USER CODE BEGIN PD */
 #define ANALOG_TABLE_SIZE 256
 #define UART3_BUFFER_SIZE 256
+#define SPI3_BUFFER_SIZE 2
 
 /* USER CODE END PD */
 
@@ -50,8 +51,12 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t spi3_tx_buffer[2];
-uint8_t spi3_rx_buffer[2];
+uint8_t table[8] = {0x00, 0x01, 0x02, 0x03,
+					0x04, 0x05, 0x06, 0x07};
+
+uint8_t spi3_tx_buffer[SPI3_BUFFER_SIZE] = {0};
+uint8_t spi3_rx_buffer[SPI3_BUFFER_SIZE] = {0};
+
 uint8_t uart3_tx_buffer[UART3_BUFFER_SIZE];
 uint8_t uart3_rx_buffer[UART3_BUFFER_SIZE];
 
@@ -216,7 +221,7 @@ PUTCHAR_PROTOTYPE
  */
 void SPI3_Start_Comm(void)
 {
-	HAL_SPI_TransmitReceive_DMA(&hspi3,spi3_tx_buffer,spi3_rx_buffer,2);
+	HAL_SPI_TransmitReceive_DMA(&hspi3,spi3_tx_buffer,spi3_rx_buffer,SPI3_BUFFER_SIZE);
 }
 
 /**
@@ -232,12 +237,31 @@ void UART3_Start_Comm(void)
   * @brief  Function to handle SPI TxRx
   * @retval None
 */
-HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef hspi)
+void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 {
-	spi3_tx_buffer[0] = spi3_rx_buffer[0];
-	spi3_tx_buffer[1] = spi3_rx_buffer[1];
 
-	HAL_SPI_TransmitReceive_DMA(&hspi3,spi3_tx_buffer,spi3_rx_buffer,2);
+	if(hspi->Instance == SPI3)
+	{
+		/* start mutex */
+
+		HAL_DMA_Abort(hspi->hdmarx);
+		HAL_DMA_Abort(hspi->hdmatx);
+
+		uint8_t index = spi3_rx_buffer[0];
+		uint8_t ch;
+		index >>= 3U;
+
+		ch = table[index];
+
+		spi3_tx_buffer[0] = ch;
+		spi3_tx_buffer[1] = 0U;
+
+		/* end mutex */
+
+		HAL_SPI_TransmitReceive_DMA(&hspi3,spi3_tx_buffer,spi3_rx_buffer,SPI3_BUFFER_SIZE);
+	}
+
+
 }
 
 /**
