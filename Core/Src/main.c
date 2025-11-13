@@ -39,6 +39,7 @@
 #define ANALOG_TABLE_SIZE 256
 #define UART3_BUFFER_SIZE 256
 #define SPI3_BUFFER_SIZE 2
+#define NUM_OF_SPI3_BUFFERS 10
 
 /* USER CODE END PD */
 
@@ -54,8 +55,9 @@
 uint8_t table[8] = {0x00, 0x01, 0x02, 0x03,
 					0x04, 0x05, 0x06, 0x07};
 
-uint8_t spi3_tx_buffer[SPI3_BUFFER_SIZE] = {0};
-uint8_t spi3_rx_buffer[SPI3_BUFFER_SIZE] = {0};
+volatile uint8_t spi3_tx_buffer[NUM_OF_SPI3_BUFFERS][SPI3_BUFFER_SIZE] = {0}; // n buffers to avoid concurrency
+volatile uint8_t spi3_rx_buffer[NUM_OF_SPI3_BUFFERS][SPI3_BUFFER_SIZE] = {0}; // n buffers to avoid concurrency
+volatile uint8_t current_spi3_buffer = 0U;
 
 uint8_t uart3_tx_buffer[UART3_BUFFER_SIZE];
 uint8_t uart3_rx_buffer[UART3_BUFFER_SIZE];
@@ -221,7 +223,8 @@ PUTCHAR_PROTOTYPE
  */
 void SPI3_Start_Comm(void)
 {
-	HAL_SPI_TransmitReceive_DMA(&hspi3,spi3_tx_buffer,spi3_rx_buffer,SPI3_BUFFER_SIZE);
+	HAL_SPI_TransmitReceive_DMA(&hspi3,(uint8_t*)spi3_tx_buffer[current_spi3_buffer],
+			(uint8_t*)spi3_rx_buffer[current_spi3_buffer],SPI3_BUFFER_SIZE);
 }
 
 /**
@@ -242,25 +245,26 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 
 	if(hspi->Instance == SPI3)
 	{
-		/* start mutex */
+//		HAL_SPI_DeInit(hspi);
 
-		HAL_DMA_Abort(hspi->hdmarx);
-		HAL_DMA_Abort(hspi->hdmatx);
-
-		uint8_t index = spi3_rx_buffer[0];
-		uint8_t ch;
+		volatile uint8_t index = spi3_rx_buffer[current_spi3_buffer][0];
 		index >>= 3U;
 
-		ch = table[index];
+		current_spi3_buffer++;
 
-		spi3_tx_buffer[0] = ch;
-		spi3_tx_buffer[1] = 0U;
+		spi3_tx_buffer[current_spi3_buffer][0] = table[index];
+		spi3_tx_buffer[current_spi3_buffer][1] = 0U;
 
-		/* end mutex */
+//		MX_SPI3_Init();
 
-		HAL_SPI_TransmitReceive_DMA(&hspi3,spi3_tx_buffer,spi3_rx_buffer,SPI3_BUFFER_SIZE);
+		HAL_SPI_TransmitReceive_DMA(&hspi3,(uint8_t*)spi3_tx_buffer[current_spi3_buffer],
+				(uint8_t*)spi3_rx_buffer[current_spi3_buffer],SPI3_BUFFER_SIZE);
+
+		if(current_spi3_buffer >= NUM_OF_SPI3_BUFFERS)
+		{
+			current_spi3_buffer = 0U;
+		}
 	}
-
 
 }
 
@@ -306,7 +310,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
                 if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (NWR_N == LOW) )
                 {
                         NWR_N = HIGH;
-                        spi3_tx_buffer[1] = channel_n;
+                        spi3_tx_buffer[current_spi3_buffer][1] = channel_n;
                         // spi3_tx_buffer[1] = analog_n_Parameters[channel_n];
                         channel_n = 0U;
                 }
@@ -327,7 +331,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
                 if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (NWR_R == LOW) )
                 {
                         NWR_R = HIGH;
-                        spi3_tx_buffer[1] = channel_r;
+                        spi3_tx_buffer[current_spi3_buffer][1] = channel_r;
                         // spi3_tx_buffer[1] = analog_r_Parameters[channel_r];
                         channel_r = 0U;
                 }
