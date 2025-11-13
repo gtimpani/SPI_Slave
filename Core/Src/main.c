@@ -244,13 +244,13 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 	if(hspi->Instance == SPI3)
 	{
 		volatile uint8_t index = spi3_rx_buffer[0];
+		index += (1U << 3U);
 		index >>= 3U;
+		index &= 0x7U;
 
 		spi3_tx_buffer[0] = table[index];
 		spi3_tx_buffer[1] = 0U;
 
-//		HAL_SPI_TransmitReceive_DMA(&hspi3,(uint8_t*)spi3_tx_buffer,
-//				(uint8_t*)spi3_rx_buffer,SPI3_BUFFER_SIZE);
 	}
 
 }
