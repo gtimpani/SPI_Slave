@@ -297,7 +297,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
                 if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (NWR_N == LOW) )
                 {
                         NWR_N = HIGH;
-                        spi3_tx_buffer[current_spi3_buffer][1] = channel_n;
+                        spi3_tx_buffer[1] = channel_n;
                         // spi3_tx_buffer[1] = analog_n_Parameters[channel_n];
                         channel_n = 0U;
                 }
@@ -318,7 +318,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
                 if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (NWR_R == LOW) )
                 {
                         NWR_R = HIGH;
-                        spi3_tx_buffer[current_spi3_buffer][1] = channel_r;
+                        spi3_tx_buffer[1] = channel_r;
                         // spi3_tx_buffer[1] = analog_r_Parameters[channel_r];
                         channel_r = 0U;
                 }
