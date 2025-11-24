@@ -221,7 +221,7 @@ PUTCHAR_PROTOTYPE
  */
 void SPI3_Start_Comm(void)
 {
-	HAL_SPI_TransmitReceive_DMA(&hspi3,(uint8_t*)spi3_tx_buffer,
+	HAL_SPI_TransmitReceive_IT(&hspi3,(uint8_t*)spi3_tx_buffer,
 			(uint8_t*)spi3_rx_buffer,SPI3_BUFFER_SIZE);
 }
 
@@ -249,8 +249,8 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 		spi3_tx_buffer[0] = table[index];
 		spi3_tx_buffer[1] = 0U;
 
-//		HAL_SPI_TransmitReceive_DMA(&hspi3,(uint8_t*)spi3_tx_buffer,
-//				(uint8_t*)spi3_rx_buffer,SPI3_BUFFER_SIZE);
+		HAL_SPI_TransmitReceive_IT(&hspi3,(uint8_t*)spi3_tx_buffer,
+					(uint8_t*)spi3_rx_buffer,SPI3_BUFFER_SIZE);
 	}
 
 }
