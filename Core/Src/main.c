@@ -17,6 +17,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include <rsd_cif.h>
 #include "main.h"
 #include "dma.h"
 #include "spi.h"
@@ -36,7 +37,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define ANALOG_TABLE_SIZE 256
+#define ANALOG_TABLE_SIZE PAR_DEF_NUMBER
 #define UART3_BUFFER_SIZE 256
 #define SPI3_BUFFER_SIZE 2
 
@@ -51,8 +52,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t table[8] = {0x00, 0x01, 0x02, 0x03,
-					0x04, 0x05, 0x06, 0x07};
 
 volatile uint8_t spi3_tx_buffer[SPI3_BUFFER_SIZE] = {0};
 volatile uint8_t spi3_rx_buffer[SPI3_BUFFER_SIZE] = {0};
@@ -77,9 +76,6 @@ NWR_STATUS NWR_R = HIGH;
 
 uint8_t channel_n = 0U;
 uint8_t channel_r = 0U;
-
-/* signal, MUX_n, MUX_n_analogInputChannel, MUX_r, MUX_r_analogInputChannel */
-//uint8_t analogTable[ANALOG_TABLE_SIZE][5] = {};
 
 /* USER CODE END PV */
 
@@ -130,6 +126,8 @@ int main(void)
   MX_USB_OTG_FS_PCD_Init();
   MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
+
+  initAnalogTable();
 
   SPI3_Start_Comm();
   UART3_Start_Comm();
@@ -244,10 +242,12 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 	if(hspi->Instance == SPI3)
 	{
 		volatile uint8_t index = spi3_rx_buffer[0];
+		spi3_tx_buffer[1] |= index << 2U; // setting MS three bits
 		index >>= 3U;
 
-		spi3_tx_buffer[0] = table[index];
-		spi3_tx_buffer[1] = 0U;
+		spi3_tx_buffer[0] = searchParameter(getMap(),PAR_DEF_NUMBER,spi3_tx_buffer[1]);
+
+		printf("spi3_tx_buffer[0]: %02X\n\r",spi3_tx_buffer[0]);
 
 		HAL_SPI_TransmitReceive_IT(&hspi3,(uint8_t*)spi3_tx_buffer,
 					(uint8_t*)spi3_rx_buffer,SPI3_BUFFER_SIZE);
@@ -276,6 +276,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
+		printf("GPIO_Pin: %d - voltage: %d\n\r",GPIO_Pin,HAL_GPIO_ReadPin(GPIOF, GPIO_Pin));
         if(GPIO_Pin == USER_Btn_Pin)
         {
                 /* write your code here to manage USER_Btn [B1] Interrupt */
