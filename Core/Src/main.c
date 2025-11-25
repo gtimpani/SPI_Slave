@@ -247,8 +247,6 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 
 		spi3_tx_buffer[0] = searchParameter(getMap(),PAR_DEF_NUMBER,spi3_tx_buffer[1]);
 
-		printf("spi3_tx_buffer[0]: %02X\n\r",spi3_tx_buffer[0]);
-
 		HAL_SPI_TransmitReceive_IT(&hspi3,(uint8_t*)spi3_tx_buffer,
 					(uint8_t*)spi3_rx_buffer,SPI3_BUFFER_SIZE);
 	}
