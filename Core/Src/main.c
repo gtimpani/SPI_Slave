@@ -271,8 +271,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-		printf("GPIO_Pin: %d - voltage: %d\n\r",GPIO_Pin,HAL_GPIO_ReadPin(GPIOF, GPIO_Pin));
-
         if(GPIO_Pin == MUX_N_NWR_Pin)
         {
 
@@ -281,7 +279,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
                 	MUX_NWR_N = LOW;
                 }
 
-                if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (MUX_NWR_N == LOW) )
+                if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) )
                 {
                 	MUX_NWR_N = HIGH;
 
@@ -304,7 +302,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
                 	MUX_NWR_R = LOW;
                 }
 
-                if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (MUX_NWR_R == LOW) )
+                if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) )
                 {
                 	MUX_NWR_R = HIGH;
 
