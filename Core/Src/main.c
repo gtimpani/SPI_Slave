@@ -17,13 +17,13 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <rsd_cif.h>
 #include "main.h"
 #include "dma.h"
 #include "spi.h"
 #include "usart.h"
 #include "usb_otg.h"
 #include "gpio.h"
+#include "rsd_cif.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -71,11 +71,8 @@ typedef enum
 	HIGH
 } NWR_STATUS;
 
-NWR_STATUS NWR_N = HIGH;
-NWR_STATUS NWR_R = HIGH;
-
-uint8_t channel_n = 0U;
-uint8_t channel_r = 0U;
+uint32_t MUX_NWR_N = HIGH;
+uint32_t MUX_NWR_R = HIGH;
 
 /* USER CODE END PV */
 
@@ -275,51 +272,51 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 		printf("GPIO_Pin: %d - voltage: %d\n\r",GPIO_Pin,HAL_GPIO_ReadPin(GPIOF, GPIO_Pin));
-        if(GPIO_Pin == USER_Btn_Pin)
-        {
-                /* write your code here to manage USER_Btn [B1] Interrupt */
-        }
-
-        if( (GPIO_Pin >= MUX_N_ADDR_0_Pin) && (GPIO_Pin <= MUX_N_ADDR_4_Pin) )
-        {
-                channel_n |= (uint8_t)GPIO_Pin;
-        }
 
         if(GPIO_Pin == MUX_N_NWR_Pin)
         {
 
                 if(HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_RESET)
                 {
-                        NWR_N = LOW;
+                	MUX_NWR_N = LOW;
                 }
 
-                if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (NWR_N == LOW) )
+                if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (MUX_NWR_N == LOW) )
                 {
-                        NWR_N = HIGH;
-                        spi3_tx_buffer[1] = channel_n;
-                        // spi3_tx_buffer[1] = analog_n_Parameters[channel_n];
-                        channel_n = 0U;
-                }
-        }
+                	MUX_NWR_N = HIGH;
 
-        if( (GPIO_Pin >= MUX_R_ADDR_0_Pin) && (GPIO_Pin <= MUX_R_ADDR_4_Pin) )
-        {
-                channel_r |= (uint8_t)GPIO_Pin;
+                    uint8_t channel_n = 0U;
+
+                    channel_n |= HAL_GPIO_ReadPin(GPIOF, MUX_N_ADDR_0_Pin) << 0U;
+                    channel_n |= HAL_GPIO_ReadPin(GPIOF, MUX_N_ADDR_1_Pin) << 1U;
+                    channel_n |= HAL_GPIO_ReadPin(GPIOF, MUX_N_ADDR_2_Pin) << 2U;
+                    channel_n |= HAL_GPIO_ReadPin(GPIOF, MUX_N_ADDR_3_Pin) << 3U;
+                    channel_n |= HAL_GPIO_ReadPin(GPIOF, MUX_N_ADDR_4_Pin) << 4U;
+
+                    spi3_tx_buffer[1] = channel_n;
+                }
         }
 
         if(GPIO_Pin == MUX_R_NWR_Pin)
         {
                 if(HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_RESET)
                 {
-                        NWR_R = LOW;
+                	MUX_NWR_R = LOW;
                 }
 
-                if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (NWR_R == LOW) )
+                if( (HAL_GPIO_ReadPin(GPIOF, GPIO_Pin) == GPIO_PIN_SET) && (MUX_NWR_R == LOW) )
                 {
-                        NWR_R = HIGH;
-                        spi3_tx_buffer[1] = channel_r;
-                        // spi3_tx_buffer[1] = analog_r_Parameters[channel_r];
-                        channel_r = 0U;
+                	MUX_NWR_R = HIGH;
+
+                	uint8_t channel_r = 0U;
+
+                    channel_r |= HAL_GPIO_ReadPin(GPIOF, MUX_R_ADDR_0_Pin) << 0U;
+                    channel_r |= HAL_GPIO_ReadPin(GPIOF, MUX_R_ADDR_1_Pin) << 1U;
+                    channel_r |= HAL_GPIO_ReadPin(GPIOF, MUX_R_ADDR_2_Pin) << 2U;
+                    channel_r |= HAL_GPIO_ReadPin(GPIOF, MUX_R_ADDR_3_Pin) << 3U;
+                    channel_r |= HAL_GPIO_ReadPin(GPIOF, MUX_R_ADDR_4_Pin) << 4U;
+
+                    spi3_tx_buffer[1] = channel_r;
                 }
 
         }

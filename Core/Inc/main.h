@@ -62,7 +62,6 @@ void Error_Handler(void);
 #define USER_Btn_EXTI_IRQn EXTI15_10_IRQn
 #define MUX_N_ADDR_0_Pin GPIO_PIN_0
 #define MUX_N_ADDR_0_GPIO_Port GPIOF
-#define MUX_N_ADDR_0_EXTI_IRQn EXTI0_IRQn
 #define MUX_N_ADDR_1_Pin GPIO_PIN_1
 #define MUX_N_ADDR_1_GPIO_Port GPIOF
 #define MUX_N_ADDR_2_Pin GPIO_PIN_2
@@ -73,6 +72,7 @@ void Error_Handler(void);
 #define MUX_N_ADDR_4_GPIO_Port GPIOF
 #define MUX_N_NWR_Pin GPIO_PIN_5
 #define MUX_N_NWR_GPIO_Port GPIOF
+#define MUX_N_NWR_EXTI_IRQn EXTI9_5_IRQn
 #define MUX_R_ADDR_0_Pin GPIO_PIN_6
 #define MUX_R_ADDR_0_GPIO_Port GPIOF
 #define MUX_R_ADDR_1_Pin GPIO_PIN_7
@@ -89,6 +89,7 @@ void Error_Handler(void);
 #define LD1_GPIO_Port GPIOB
 #define MUX_R_NWR_Pin GPIO_PIN_11
 #define MUX_R_NWR_GPIO_Port GPIOF
+#define MUX_R_NWR_EXTI_IRQn EXTI15_10_IRQn
 #define LD3_Pin GPIO_PIN_14
 #define LD3_GPIO_Port GPIOB
 #define STLK_RX_Pin GPIO_PIN_8
