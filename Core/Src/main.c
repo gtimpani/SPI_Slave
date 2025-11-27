@@ -55,6 +55,7 @@
 
 volatile uint8_t spi3_tx_buffer[SPI3_BUFFER_SIZE] = {0};
 volatile uint8_t spi3_rx_buffer[SPI3_BUFFER_SIZE] = {0};
+volatile uint8_t index = 0U;
 
 uint8_t uart3_tx_buffer[UART3_BUFFER_SIZE];
 uint8_t uart3_rx_buffer[UART3_BUFFER_SIZE];
@@ -238,11 +239,10 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 
 	if(hspi->Instance == SPI3)
 	{
-		volatile uint8_t index = spi3_rx_buffer[0];
+		index = spi3_rx_buffer[0];
 		spi3_tx_buffer[1] |= index << 2U; // setting MS three bits
-		index >>= 3U;
 
-		spi3_tx_buffer[0] = searchParameter(getMap(),PAR_DEF_NUMBER,spi3_tx_buffer[1]);
+		spi3_tx_buffer[0] = binarySearch(PAR_DEF_NUMBER,spi3_tx_buffer[1]);
 
 		HAL_SPI_TransmitReceive_IT(&hspi3,(uint8_t*)spi3_tx_buffer,
 					(uint8_t*)spi3_rx_buffer,SPI3_BUFFER_SIZE);

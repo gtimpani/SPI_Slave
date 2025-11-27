@@ -7,6 +7,11 @@
 
 #include <rsd_cif.h>
 
+//#define DEVICE_NOMINAL
+#ifndef DEVICE_NOMINAL
+#define DEVICE_REDUNDANT
+#endif
+
 /*********************************************************
 * PRIVATE STRUCTURED TYPES
 **********************************************************/
@@ -316,7 +321,7 @@ static const RSD_analog_parameter analogParameters[] = {
 
 typedef struct
 {
-	uint8_t key;
+	int key;
 	uint8_t value;
 } hashmap;
 
@@ -330,30 +335,104 @@ void initAnalogTable(void)
 	for(int i = 0; i < PAR_DEF_NUMBER; i++)
 	{
 		RSD_p = analogParameters[i];
+
 		if(RSD_p.MUX_n.MUX_id != MUX_NONE)
 		{
-			analog_table[i].key = RSD_p.MUX_n.ADC_channel << 5U;
-			analog_table[i].key |= RSD_p.MUX_n_analogInputChannel;
-		} else
+#ifdef DEVICE_NOMINAL
+			if(RSD_p.MUX_n.ADC.ADC_id == 0U) /* ADC_A */
+#else
+			if(RSD_p.MUX_n.ADC.ADC_id == 1U) /* ADC_B */
+#endif
+			{
+				analog_table[i].key = RSD_p.MUX_n.ADC_channel << 5U;
+				analog_table[i].key |= ( RSD_p.MUX_n_analogInputChannel - 1U );
+
+			} else if(RSD_p.MUX_r.MUX_id != MUX_NONE)
+			{
+				analog_table[i].key = RSD_p.MUX_r.ADC_channel << 5U;
+				analog_table[i].key |= ( RSD_p.MUX_r_analogInputChannel - 1U );
+
+			} else
+			{
+				analog_table[i].key = -1;
+			}
+
+		} else if(RSD_p.MUX_r.MUX_id != MUX_NONE)
+
 		{
-			analog_table[i].key = RSD_p.MUX_r.ADC_channel << 5U;
-			analog_table[i].key |= RSD_p.MUX_r_analogInputChannel;
+#ifdef DEVICE_NOMINAL
+			if(RSD_p.MUX_r.ADC.ADC_id == 0U) /* ADC_A */
+#else
+			if(RSD_p.MUX_r.ADC.ADC_id == 1U) /* ADC_B */
+#endif
+
+			{
+				analog_table[i].key = RSD_p.MUX_r.ADC_channel << 5U;
+				analog_table[i].key |= ( RSD_p.MUX_r_analogInputChannel - 1U );
+
+			} else
+			{
+				analog_table[i].key = -1;
+			}
+
+		} else
+
+		{
+			analog_table[i].key = -1;
 		}
 
 		analog_table[i].value = i;
 	}
+
+	bubbleSortTable();
 }
 
-uint8_t* searchParameter(hashmap* map, uint8_t size, uint8_t key)
+void bubbleSortTable(void)
 {
-	for(int i = 0; i < size; i++)
+	for(int i = 0; i < ( PAR_DEF_NUMBER - 1); i++)
 	{
-		if(map[i].key == key)
+		for(int j = 0; j < PAR_DEF_NUMBER; j++)
 		{
-			return map[i].value;
+			if(analog_table[j].key > analog_table[j+1].key)
+			{
+				hashmap temp = analog_table[j];
+				analog_table[j] = analog_table[j+1];
+				analog_table[j+1] = temp;
+			}
 		}
 	}
-	return 0;
+}
+
+/**
+ * @retval map index for found key
+ */
+
+int binarySearch(uint8_t size, int key)
+{
+	int low = 0;
+	int high = size - 1;
+
+	while(low <= high)
+	{
+		int mid = low + (high - low) / 2;
+
+		if(analog_table[mid].key == key)
+		{
+			return analog_table[mid].value;
+		}
+
+		if(analog_table[mid].key < key)
+		{
+			low = mid + 1;
+		}
+
+		if(analog_table[mid].key > key)
+		{
+			high = mid - 1;
+		}
+	}
+
+	return -1;
 }
 
 hashmap* getMap(void)
