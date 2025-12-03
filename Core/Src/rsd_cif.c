@@ -128,38 +128,38 @@ static const MUX_x multiplexers[] = {
 	X(PAR_RSD_PS5,                  	MUX_7,      21U,    		MUX_8,      21U) 	\
 	X(PAR_RSD_PS6,                  	MUX_7,      24U,    		MUX_8,      24U) 	\
 	X(PAR_RSD_PS7,                  	MUX_7,      27U,    		MUX_8,      27U) 	\
-	X(PAR_TS_TEMP_01,               	MUX_1,      1U,     		MUX_2,      1U)  	\
-	X(PAR_TS_TEMP_02,               	MUX_1,      3U,     		MUX_2,      3U)  	\
-	X(PAR_TS_TEMP_03,               	MUX_1,      5U,     		MUX_2,      5U)  	\
-	X(PAR_TS_TEMP_04,               	MUX_1,      7U,     		MUX_2,      7U)  	\
-	X(PAR_TS_TEMP_05,               	MUX_1,      9U,     		MUX_2,      9U)  	\
-	X(PAR_TS_TEMP_06,               	MUX_1,      11U,    		MUX_2,      11U) 	\
-	X(PAR_TS_TEMP_07,               	MUX_1,      13U,    		MUX_2,      13U) 	\
-	X(PAR_TS_TEMP_08,               	MUX_1,      15U,    		MUX_2,      15U) 	\
-	X(PAR_TS_TEMP_09,               	MUX_1,      17U,    		MUX_2,      17U) 	\
-	X(PAR_TS_TEMP_10,               	MUX_1,      19U,    		MUX_2,      19U) 	\
-	X(PAR_TS_TEMP_11,               	MUX_1,      21U,    		MUX_2,      21U) 	\
-	X(PAR_TS_TEMP_12,               	MUX_1,      23U,    		MUX_2,      23U) 	\
-	X(PAR_TS_TEMP_13,               	MUX_1,      25U,    		MUX_2,      25U) 	\
-	X(PAR_TS_TEMP_14,               	MUX_1,      27U,    		MUX_2,      27U) 	\
-	X(PAR_TS_TEMP_15,               	MUX_1,      29U,    		MUX_2,      29U) 	\
-	X(PAR_TS_TEMP_16,               	MUX_1,      31U,    		MUX_2,      31U) 	\
-	X(PAR_TS_TEMP_17,               	MUX_3,      1U,     		MUX_4,      1U)  	\
-	X(PAR_TS_TEMP_18,               	MUX_3,      3U,     		MUX_4,      3U)  	\
-	X(PAR_TS_TEMP_19,               	MUX_3,      5U,     		MUX_4,      5U)  	\
-	X(PAR_TS_TEMP_20,               	MUX_3,      7U,     		MUX_4,      7U)  	\
-	X(PAR_TS_TEMP_21,               	MUX_3,      9U,     		MUX_4,      9U)  	\
-	X(PAR_TS_TEMP_22,               	MUX_3,      11U,    		MUX_4,      11U) 	\
-	X(PAR_TS_TEMP_23,               	MUX_3,      13U,    		MUX_4,      13U) 	\
-	X(PAR_TS_TEMP_24,               	MUX_3,      15U,    		MUX_4,      15U) 	\
-	X(PAR_TS_TEMP_25,               	MUX_3,      17U,    		MUX_4,      17U) 	\
-	X(PAR_TS_TEMP_26,               	MUX_3,      19U,    		MUX_4,      19U) 	\
-	X(PAR_TS_TEMP_27,               	MUX_3,      21U,    		MUX_4,      21U) 	\
-	X(PAR_TS_TEMP_28,               	MUX_3,      23U,    		MUX_4,      23U) 	\
-	X(PAR_TS_TEMP_29,               	MUX_3,      25U,    		MUX_4,      25U) 	\
-	X(PAR_TS_TEMP_30,               	MUX_3,      27U,    		MUX_4,      27U) 	\
-	X(PAR_TS_TEMP_31,               	MUX_3,      29U,    		MUX_4,      29U) 	\
-	X(PAR_TS_TEMP_32,               	MUX_3,      31U,    		MUX_4,      31U) 	\
+	X(PAR_TS_TEMP_01,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_02,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_03,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_04,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_05,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_06,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_07,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_08,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_09,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_10,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_11,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_12,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_13,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_14,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_15,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_16,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_17,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_18,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_19,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_20,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_21,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_22,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_23,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_24,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_25,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_26,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_27,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_28,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_29,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_30,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_31,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_TEMP_32,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_RSD_PS1_CURR,             	MUX_7,      7U,     		MUX_8,      7U)  	\
 	X(PAR_RSD_PS1_VOLT,             	MUX_7,      8U,     		MUX_8,      8U)  	\
 	X(PAR_RSD_PS2_CURR,             	MUX_7,      10U,    		MUX_8,      10U) 	\
@@ -211,69 +211,69 @@ static const MUX_x multiplexers[] = {
 	X(PAR_RESERVED_149,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_RESERVED_150,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_01,               	MUX_1,      2U,     		MUX_2,      2U)  	\
-	X(PAR_TS_VOLT_01,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_02,               	MUX_1,      4U,     		MUX_2,      4U)  	\
-	X(PAR_TS_VOLT_02,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_03,               	MUX_1,      6U,     		MUX_2,      6U)  	\
-	X(PAR_TS_VOLT_03,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_04,               	MUX_1,      8U,     		MUX_2,      8U)  	\
-	X(PAR_TS_VOLT_04,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_05,               	MUX_1,      10U,    		MUX_2,      10U) 	\
-	X(PAR_TS_VOLT_05,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_06,               	MUX_1,      12U,    		MUX_2,      12U) 	\
-	X(PAR_TS_VOLT_06,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_07,               	MUX_1,      14U,    		MUX_2,      14U) 	\
-	X(PAR_TS_VOLT_07,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_08,               	MUX_1,      16U,    		MUX_2,      16U) 	\
-	X(PAR_TS_VOLT_08,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_09,               	MUX_1,      18U,    		MUX_2,      18U) 	\
-	X(PAR_TS_VOLT_09,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_10,               	MUX_1,      20U,    		MUX_2,      20U) 	\
-	X(PAR_TS_VOLT_10,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_11,               	MUX_1,      22U,    		MUX_2,      22U) 	\
-	X(PAR_TS_VOLT_11,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_12,               	MUX_1,      24U,    		MUX_2,      24U) 	\
-	X(PAR_TS_VOLT_12,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_13,               	MUX_1,      26U,    		MUX_2,      26U) 	\
-	X(PAR_TS_VOLT_13,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_14,               	MUX_1,      28U,    		MUX_2,      28U) 	\
-	X(PAR_TS_VOLT_14,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_15,               	MUX_1,      30U,    		MUX_2,      30U) 	\
-	X(PAR_TS_VOLT_15,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_16,               	MUX_1,      32U,    		MUX_2,      32U) 	\
-	X(PAR_TS_VOLT_16,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_17,               	MUX_3,      2U,     		MUX_4,      2U)  	\
-	X(PAR_TS_VOLT_17,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_18,               	MUX_3,      4U,     		MUX_4,      4U)  	\
-	X(PAR_TS_VOLT_18,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_19,               	MUX_3,      6U,     		MUX_4,      6U)  	\
-	X(PAR_TS_VOLT_19,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_20,               	MUX_3,      8U,     		MUX_4,      8U)  	\
-	X(PAR_TS_VOLT_20,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_21,               	MUX_3,      10U,    		MUX_4,      10U) 	\
-	X(PAR_TS_VOLT_21,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_22,               	MUX_3,      12U,    		MUX_4,      12U) 	\
-	X(PAR_TS_VOLT_22,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_23,               	MUX_3,      14U,    		MUX_4,      14U) 	\
-	X(PAR_TS_VOLT_23,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_24,               	MUX_3,      16U,    		MUX_4,      16U) 	\
-	X(PAR_TS_VOLT_24,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_25,               	MUX_3,      18U,    		MUX_4,      18U) 	\
-	X(PAR_TS_VOLT_25,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_26,               	MUX_3,      20U,    		MUX_4,      20U) 	\
-	X(PAR_TS_VOLT_26,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_27,               	MUX_3,      22U,    		MUX_4,      22U) 	\
-	X(PAR_TS_VOLT_27,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_28,               	MUX_3,      24U,    		MUX_4,      24U) 	\
-	X(PAR_TS_VOLT_28,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_29,               	MUX_3,      26U,    		MUX_4,      26U) 	\
-	X(PAR_TS_VOLT_29,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_30,               	MUX_3,      28U,    		MUX_4,      28U) 	\
-	X(PAR_TS_VOLT_30,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_31,               	MUX_3,      30U,    		MUX_4,      30U) 	\
-	X(PAR_TS_VOLT_31,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
 	X(PAR_TS_CURR_32,               	MUX_3,      32U,    		MUX_4,      32U) 	\
-	X(PAR_TS_VOLT_32,               	MUX_NONE,   0U,     		MUX_NONE,   0U)  	\
+	X(PAR_TS_VOLT_01,               	MUX_1,      1U,     		MUX_2,      1U)  	\
+	X(PAR_TS_VOLT_02,               	MUX_1,      3U,     		MUX_2,      3U)  	\
+	X(PAR_TS_VOLT_03,               	MUX_1,      5U,     		MUX_2,      5U)  	\
+	X(PAR_TS_VOLT_04,               	MUX_1,      7U,     		MUX_2,      7U)  	\
+	X(PAR_TS_VOLT_05,               	MUX_1,      9U,     		MUX_2,      9U)  	\
+	X(PAR_TS_VOLT_06,               	MUX_1,      11U,    		MUX_2,      11U) 	\
+	X(PAR_TS_VOLT_07,               	MUX_1,      13U,    		MUX_2,      13U) 	\
+	X(PAR_TS_VOLT_08,               	MUX_1,      15U,    		MUX_2,      15U) 	\
+	X(PAR_TS_VOLT_09,               	MUX_1,      17U,    		MUX_2,      17U) 	\
+	X(PAR_TS_VOLT_10,               	MUX_1,      19U,    		MUX_2,      19U) 	\
+	X(PAR_TS_VOLT_11,               	MUX_1,      21U,    		MUX_2,      21U) 	\
+	X(PAR_TS_VOLT_12,               	MUX_1,      23U,    		MUX_2,      23U) 	\
+	X(PAR_TS_VOLT_13,               	MUX_1,      25U,    		MUX_2,      25U) 	\
+	X(PAR_TS_VOLT_14,               	MUX_1,      27U,    		MUX_2,      27U) 	\
+	X(PAR_TS_VOLT_15,               	MUX_1,      29U,    		MUX_2,      29U) 	\
+	X(PAR_TS_VOLT_16,               	MUX_1,      31U,    		MUX_2,      31U) 	\
+	X(PAR_TS_VOLT_17,               	MUX_3,      1U,     		MUX_4,      1U)  	\
+	X(PAR_TS_VOLT_18,               	MUX_3,      3U,     		MUX_4,      3U)  	\
+	X(PAR_TS_VOLT_19,               	MUX_3,      5U,     		MUX_4,      5U)  	\
+	X(PAR_TS_VOLT_20,               	MUX_3,      7U,     		MUX_4,      7U)  	\
+	X(PAR_TS_VOLT_21,               	MUX_3,      9U,     		MUX_4,      9U)  	\
+	X(PAR_TS_VOLT_22,               	MUX_3,      11U,    		MUX_4,      11U) 	\
+	X(PAR_TS_VOLT_23,               	MUX_3,      13U,    		MUX_4,      13U) 	\
+	X(PAR_TS_VOLT_24,               	MUX_3,      15U,    		MUX_4,      15U) 	\
+	X(PAR_TS_VOLT_25,               	MUX_3,      17U,    		MUX_4,      17U) 	\
+	X(PAR_TS_VOLT_26,               	MUX_3,      19U,    		MUX_4,      19U) 	\
+	X(PAR_TS_VOLT_27,               	MUX_3,      21U,    		MUX_4,      21U) 	\
+	X(PAR_TS_VOLT_28,               	MUX_3,      23U,    		MUX_4,      23U) 	\
+	X(PAR_TS_VOLT_29,               	MUX_3, 		25U, 			MUX_4,		25U) 	\
+	X(PAR_TS_VOLT_30,               	MUX_3,      27U,    		MUX_4,      27U) 	\
+	X(PAR_TS_VOLT_31,               	MUX_3,      29U,    		MUX_4,      29U) 	\
+	X(PAR_TS_VOLT_32,               	MUX_3,      31U,    		MUX_4,      31U) 	\
 	X(PAR_RCE_AN_PWR_CURR,          	MUX_9,      17U,    		MUX_10,     17U) 	\
 	X(PAR_RCE_10VAN_PWR_CURR,       	MUX_9,      18U,    		MUX_10, 	18U) 	\
 	X(PAR_RCE_3V3DC_CURR,           	MUX_9,      19U, 			MUX_10, 	19U) 	\
@@ -290,6 +290,7 @@ static const MUX_x multiplexers[] = {
 	X(PAR_RCE_MVDC_ADC,             	MUX_9,      30U, 			MUX_10, 	30U) 	\
 	X(PAR_RCE_MHVDC_ADC,            	MUX_9,      31U, 			MUX_10, 	31U) 	\
 	X(PAR_RCE_HVDC_ADC,             	MUX_9,      32U, 			MUX_10, 	32U) 	\
+	X(PAR_RCE_TEMP,						MUX_NONE, 	0U, 			MUX_NONE, 	0U) 	\
     X(PAR_EPR_PS2_LOW_EMERGENCY_THR,    MUX_NONE, 	0U, 			MUX_NONE, 	0U) 	\
 	X(PAR_EPR_V2_MAX_OPENTIME_TIMEOUT,  MUX_NONE, 	0U, 			MUX_NONE, 	0U) 	\
 	X(PAR_EPR_PS2_OUT_SETPOINT,         MUX_NONE, 	0U, 			MUX_NONE, 	0U) 	\
@@ -385,6 +386,12 @@ void initAnalogTable(void)
 	}
 
 	bubbleSortTable();
+
+//	for(int i = 0; i < PAR_DEF_NUMBER; i++)
+//	{
+//		printf("%d: key %d hex %02X - value %d hex %02X\n\r",i,analog_table[i].key,
+//				analog_table[i].key,analog_table[i].value, analog_table[i].value);
+//	}
 }
 
 void bubbleSortTable(void)

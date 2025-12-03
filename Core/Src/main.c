@@ -240,9 +240,11 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 	if(hspi->Instance == SPI3)
 	{
 		index = spi3_rx_buffer[0];
-		spi3_tx_buffer[1] |= index << 2U; // setting MS three bits
+		spi3_tx_buffer[0] |= index << 2U; // setting MS three bits
 
-		spi3_tx_buffer[0] = binarySearch(PAR_DEF_NUMBER,spi3_tx_buffer[1]);
+		spi3_tx_buffer[1] = binarySearch(PAR_DEF_NUMBER,spi3_tx_buffer[0]);
+
+		spi3_tx_buffer[0] = 0U;
 
 		HAL_SPI_TransmitReceive_IT(&hspi3,(uint8_t*)spi3_tx_buffer,
 					(uint8_t*)spi3_rx_buffer,SPI3_BUFFER_SIZE);
@@ -291,7 +293,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
                     channel_n |= HAL_GPIO_ReadPin(GPIOF, MUX_N_ADDR_3_Pin) << 3U;
                     channel_n |= HAL_GPIO_ReadPin(GPIOF, MUX_N_ADDR_4_Pin) << 4U;
 
-                    spi3_tx_buffer[1] = channel_n;
+                    spi3_tx_buffer[0] = channel_n;
                 }
         }
 
@@ -314,7 +316,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
                     channel_r |= HAL_GPIO_ReadPin(GPIOF, MUX_R_ADDR_3_Pin) << 3U;
                     channel_r |= HAL_GPIO_ReadPin(GPIOF, MUX_R_ADDR_4_Pin) << 4U;
 
-                    spi3_tx_buffer[1] = channel_r;
+                    spi3_tx_buffer[0] = channel_r;
                 }
 
         }
