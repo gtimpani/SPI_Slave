@@ -7,7 +7,7 @@
 
 #include <rsd_cif.h>
 
-//#define DEVICE_NOMINAL
+#define DEVICE_NOMINAL
 #ifndef DEVICE_NOMINAL
 #define DEVICE_REDUNDANT
 #endif

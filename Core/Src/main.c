@@ -228,6 +228,7 @@ void SPI3_Start_Comm(void)
 void UART3_Start_Comm(void)
 {
 	HAL_UART_Receive_DMA(&huart3,uart3_rx_buffer,UART3_BUFFER_SIZE);
+	HAL_UART_Transmit_DMA(&huart3,uart3_tx_buffer,UART3_BUFFER_SIZE);
 }
 
 /**
@@ -258,12 +259,16 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
-  HAL_UART_Receive_DMA(&huart3, uart3_rx_buffer, UART3_BUFFER_SIZE);
+	HAL_UART_Receive_DMA(&huart3, uart3_rx_buffer, UART3_BUFFER_SIZE);
+}
 
-  for(int i = 0; i < UART3_BUFFER_SIZE; i++)
-  {
-          printf("HAL_UART_Receive_DMA:: %02X\n",uart3_rx_buffer[i]);
-  }
+/**
+  * @brief  Function to handle UART Tx
+  * @retval None
+*/
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	HAL_UART_Transmit_DMA(&huart3, uart3_tx_buffer, UART3_BUFFER_SIZE);
 }
 
 
